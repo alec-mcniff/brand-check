@@ -52,6 +52,16 @@
 <script type="application/json" id="posts-manifest">
 [
   {
+    "slug": "ambush-marketing-and-the-2026-world-cup-what-non-sponsors-can-and-cant-do",
+    "category": "Trademark · Advertising",
+    "title": "Ambush Marketing and the 2026 World Cup: What Non-Sponsors Can (and Can’t) Do",
+    "deck": "Brands that can’t afford an official FIFA sponsorship are already looking for creative ways to ride the wave of consumer attention. Some of those strategies are perfectly legal. Others will generate cease-and-desist letters well before kickoff.",
+    "author": "Alec McNiff",
+    "readTime": "8 min read",
+    "hero": "assets/heroes/ambush-marketing-world-cup.png",
+    "heroAlt": "Fans walking toward a stadium past billboards for official sponsors and a rival brand’s soccer advertisement"
+  },
+  {
     "slug": "when-cleared-doesnt-mean-cleared-scope-of-license-risk-and-vendor-reliance-in-dua-lipa-v-samsung",
     "category": "Copyright · Music & Entertainment",
     "title": "When “Cleared” Doesn’t Mean Cleared: Scope-of-License Risk and Vendor Reliance in Dua Lipa v. Samsung",
@@ -401,8 +411,21 @@
 </div>
 
 <script>
+  // Convert straight quotes/apostrophes to curly in manifest text fields.
+  function smartQuotes(str) {
+    if (!str) return str;
+    return str
+      .replace(/(\s|^|>)"(\S)/g, '$1\u201c$2')
+      .replace(/"(\s|$|<)/g, '\u201d$1')
+      .replace(/(\s|^|>)'(\S)/g, '$1\u2018$2')
+      .replace(/'(\s|$|<)/g, '\u2019$1')
+      .replace(/([A-Za-z0-9])'([A-Za-z])/g, '$1\u2019$2')
+      .replace(/([A-Za-z0-9])"(\s|$|[^A-Za-z0-9])/g, '$1\u201d$2');
+  }
+
   // Read post manifest and render the home page.
   const posts = JSON.parse(document.getElementById('posts-manifest').textContent);
+  posts.forEach(p => { p.title = smartQuotes(p.title); p.deck = smartQuotes(p.deck); });
 
   // Category filter mapping: nav key -> match function against post.category
   const catFilters = {
